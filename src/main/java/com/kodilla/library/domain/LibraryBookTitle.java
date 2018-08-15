@@ -6,11 +6,10 @@ import lombok.Getter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-//TODO
-//inna nazwa np.
 @AllArgsConstructor
 @Getter
 @Entity(name = "LibraryTitles")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"title", "author", "publicationYear"}))
 public class LibraryBookTitle {
 
     @Id
@@ -27,6 +26,7 @@ public class LibraryBookTitle {
     private String author;
 
     @Column
+    @NotNull
     private int publicationYear;
 
 }

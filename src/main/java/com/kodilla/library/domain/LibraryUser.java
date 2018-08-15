@@ -28,6 +28,7 @@ public class LibraryUser {
     private String lastName;
 
     @Column
+    @NotNull
     private LocalDate accountCreatedDate;
 
 }
