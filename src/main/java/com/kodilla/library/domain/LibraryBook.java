@@ -12,7 +12,7 @@ public class LibraryBook {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "ID", updatable = false, nullable = false)
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = LibraryTitle.class)
@@ -21,5 +21,8 @@ public class LibraryBook {
     @Enumerated(EnumType.STRING)
     @Column(length = 12)
     private LibraryBookStatus libraryBookStatus;
+
+    @OneToOne(mappedBy = "libraryBook")
+    private LibraryRent libraryRent;
 
 }

@@ -14,15 +14,17 @@ public class LibraryRent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "ID", updatable = false, nullable = false)
     private Long id;
 
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = LibraryBook.class)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "BOOK_ID")
     private LibraryBook libraryBook;
 
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = LibraryUser.class)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "LIBRARYUSER_ID")
     private LibraryUser libraryUser;
 
     @Column

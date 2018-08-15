@@ -5,6 +5,8 @@ import lombok.Getter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @Getter
@@ -13,7 +15,7 @@ public class LibraryUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "ID", updatable = false, nullable = false)
     private Long id;
 
     @Column
@@ -23,5 +25,8 @@ public class LibraryUser {
     @Column
     @NotNull
     private String lastName;
+
+    @OneToMany(mappedBy = "libraryUser", fetch = FetchType.LAZY)
+    private List<LibraryRent> rents = new ArrayList<>();
 
 }
