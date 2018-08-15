@@ -15,10 +15,9 @@ public class LibraryBook {
     @Column(name = "BOOK_ID", updatable = false, nullable = false)
     private Long id;
 
-    //TODO
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = LibraryTitle.class)
-    @JoinColumn(name = "LIBRARYTITLE_ID")
-    private LibraryTitle libraryTitle;
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = LibraryBookTitle.class)
+    @JoinColumn(name = "TITLE_ID")
+    private LibraryBookTitle libraryBookTitle;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 12)

@@ -1,26 +1,26 @@
 package com.kodilla.library.repository;
 
-import com.kodilla.library.domain.LibraryTitle;
+import com.kodilla.library.domain.LibraryBookTitle;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface TitleRepository extends CrudRepository<LibraryTitle, Long> {
+public interface TitleRepository extends CrudRepository<LibraryBookTitle, Long> {
 
     @Override
-    List<LibraryTitle> findAll();
+    List<LibraryBookTitle> findAll();
 
     @Override
-    LibraryTitle findOne(Long id);
+    LibraryBookTitle findOne(Long id);
 
-    LibraryTitle findDistinctByTitle(String title);
+    LibraryBookTitle findDistinctByTitle(String title);
 
-    List<LibraryTitle> findAllByAuthor(String author);
+    List<LibraryBookTitle> findAllByAuthor(String author);
 
-    List<LibraryTitle> findAllByPublicationYear(int publicationYear);
+    List<LibraryBookTitle> findAllByPublicationYear(int publicationYear);
 
     @Override
-    LibraryTitle save(LibraryTitle libraryTitle);
+    LibraryBookTitle save(LibraryBookTitle libraryBookTitle);
 
     @Override
     void delete(Long id);

@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Getter
 @Entity(name = "LibraryTitles")
-public class LibraryTitle {
+public class LibraryBookTitle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
