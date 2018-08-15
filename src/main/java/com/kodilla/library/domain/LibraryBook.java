@@ -12,9 +12,10 @@ public class LibraryBook {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID", updatable = false, nullable = false)
+    @Column(name = "BOOK_ID", updatable = false, nullable = false)
     private Long id;
 
+    //TODO
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = LibraryTitle.class)
     @JoinColumn(name = "LIBRARYTITLE_ID")
     private LibraryTitle libraryTitle;

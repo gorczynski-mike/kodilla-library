@@ -14,7 +14,7 @@ public class LibraryUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID", updatable = false, nullable = false)
+    @Column(name = "USER_ID", updatable = false, nullable = false)
     private Long id;
 
     @Column

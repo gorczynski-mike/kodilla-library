@@ -6,6 +6,8 @@ import lombok.Getter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+//TODO
+//inna nazwa np.
 @AllArgsConstructor
 @Getter
 @Entity(name = "LibraryTitles")
@@ -13,7 +15,7 @@ public class LibraryTitle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID", updatable = false, nullable = false)
+    @Column(name = "TITLE_ID", updatable = false, nullable = false)
     private Long id;
 
     @Column

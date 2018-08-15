@@ -24,7 +24,7 @@ public class LibraryRent {
 
     @NotNull
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "LIBRARYUSER_ID")
+    @JoinColumn(name = "USER_ID")
     private LibraryUser libraryUser;
 
     @Column
