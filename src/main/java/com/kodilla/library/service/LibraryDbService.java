@@ -30,4 +30,7 @@ public class LibraryDbService {
         return userRepository.findOne(id);
     }
 
+    public void saveUser(LibraryUser libraryUser) {
+        userRepository.save(libraryUser);
+    }
 }

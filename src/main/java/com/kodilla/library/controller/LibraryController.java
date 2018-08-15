@@ -29,4 +29,9 @@ public class LibraryController {
         return libraryMapper.mapUserToUserDto(libraryDbService.getUser(id));
     }
 
+    @PostMapping("/users")
+    public void createUser(@RequestBody LibraryUserDto libraryUserDto) {
+        libraryDbService.saveUser(libraryMapper.mapUserDtoToUser(libraryUserDto));
+    }
+
 }

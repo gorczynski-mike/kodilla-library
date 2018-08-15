@@ -2,6 +2,7 @@ package com.kodilla.library.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 
 @AllArgsConstructor
 @Getter
+@NoArgsConstructor
 @Entity(name = "LibraryUsers")
 public class LibraryUser {
 
