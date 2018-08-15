@@ -24,8 +24,8 @@ public class LibraryController {
         return libraryDbService.getAllUsers();
     }
 
-    @GetMapping("/user")
-    public LibraryUserDto getUser(@RequestParam Long id) {
+    @GetMapping("/users/{id}")
+    public LibraryUserDto getUser(@PathVariable Long id) {
         return libraryMapper.mapUserToUserDto(libraryDbService.getUser(id));
     }
 
