@@ -23,7 +23,7 @@ public class LibraryRent {
     private LibraryBook libraryBook;
 
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "LIBRARYUSER_ID")
     private LibraryUser libraryUser;
 

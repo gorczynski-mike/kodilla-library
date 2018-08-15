@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class LibraryUser {
     @NotNull
     private String lastName;
 
-    @OneToMany(mappedBy = "libraryUser", fetch = FetchType.LAZY)
-    private List<LibraryRent> rents = new ArrayList<>();
+    @Column
+    private LocalDate accountCreatedDate;
 
 }

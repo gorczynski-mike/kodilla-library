@@ -16,13 +16,11 @@ public class LibraryBook {
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = LibraryTitle.class)
+    @JoinColumn(name = "LIBRARYTITLE_ID")
     private LibraryTitle libraryTitle;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 12)
     private LibraryBookStatus libraryBookStatus;
-
-    @OneToOne(mappedBy = "libraryBook")
-    private LibraryRent libraryRent;
 
 }
