@@ -7,6 +7,7 @@ import com.kodilla.library.service.LibraryDbService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -29,8 +30,10 @@ public class LibraryController {
         return libraryMapper.mapUserToUserDto(libraryDbService.getUser(id));
     }
 
-    @PostMapping("/users")
+    @PostMapping("/users/createNewUser")
     public void createUser(@RequestBody LibraryUserDto libraryUserDto) {
+        libraryUserDto.setId(null);
+        libraryUserDto.setAccountCreatedDate(LocalDate.now());
         libraryDbService.saveUser(libraryMapper.mapUserDtoToUser(libraryUserDto));
     }
 
