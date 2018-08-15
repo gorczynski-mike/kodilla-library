@@ -1,7 +1,10 @@
 package com.kodilla.library.controller;
 
+import com.kodilla.library.domain.LibraryBookTitle;
 import com.kodilla.library.domain.LibraryUser;
+import com.kodilla.library.domain.dto.LibraryBookTitleDto;
 import com.kodilla.library.domain.dto.LibraryUserDto;
+import com.kodilla.library.exceptions.TitleNotFoundException;
 import com.kodilla.library.exceptions.UserNotFoundException;
 import com.kodilla.library.mapper.LibraryMapper;
 import com.kodilla.library.service.LibraryDbService;
@@ -45,6 +48,27 @@ public class LibraryController {
         libraryUserDto.setId(null);
         libraryUserDto.setAccountCreatedDate(LocalDate.now());
         libraryDbService.saveUser(libraryMapper.mapUserDtoToUser(libraryUserDto));
+    }
+
+    @GetMapping("/titles")
+    public List<LibraryBookTitle> getTitles() {
+        return libraryDbService.getAllTitles();
+    }
+
+    @GetMapping("/titles/{id}")
+    public LibraryBookTitleDto getTitle(@PathVariable Long id) {
+        try {
+            return libraryMapper.mapBookTitleToBookTitleDto(libraryDbService.getTitle(id));
+        } catch (TitleNotFoundException e) {
+            LOGGER.warn(e.getMessage());
+            return null;
+        }
+    }
+
+    @PostMapping("/titles/createNewTitle")
+    public void createTitle(@RequestBody LibraryBookTitleDto libraryBookTitleDto) {
+        libraryBookTitleDto.setId(null);
+        libraryDbService.saveTitle(libraryMapper.mapBookTitleDtoToBookTitle(libraryBookTitleDto));
     }
 
 }

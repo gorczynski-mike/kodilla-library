@@ -1,6 +1,8 @@
 package com.kodilla.library.service;
 
+import com.kodilla.library.domain.LibraryBookTitle;
 import com.kodilla.library.domain.LibraryUser;
+import com.kodilla.library.exceptions.TitleNotFoundException;
 import com.kodilla.library.exceptions.UserNotFoundException;
 import com.kodilla.library.repository.BookRepository;
 import com.kodilla.library.repository.RentRepository;
@@ -9,9 +11,7 @@ import com.kodilla.library.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class LibraryDbService {
@@ -35,5 +35,17 @@ public class LibraryDbService {
 
     public void saveUser(LibraryUser libraryUser) {
         userRepository.save(libraryUser);
+    }
+
+    public List<LibraryBookTitle> getAllTitles() {
+        return titleRepository.findAll();
+    }
+
+    public LibraryBookTitle getTitle(Long id) throws TitleNotFoundException {
+        return titleRepository.findById(id).orElseThrow(() -> new TitleNotFoundException(id));
+    }
+
+    public void saveTitle(LibraryBookTitle libraryBookTitle) {
+        titleRepository.save(libraryBookTitle);
     }
 }
