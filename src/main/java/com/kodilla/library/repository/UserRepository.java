@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends CrudRepository<LibraryUser, Long> {
@@ -12,8 +13,7 @@ public interface UserRepository extends CrudRepository<LibraryUser, Long> {
     @Override
     List<LibraryUser> findAll();
 
-    @Override
-    LibraryUser findOne(Long id);
+    Optional<LibraryUser> findById(Long id);
 
     @Override
     LibraryUser save(LibraryUser libraryUser);
