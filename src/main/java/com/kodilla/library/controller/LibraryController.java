@@ -112,6 +112,17 @@ public class LibraryController {
         }
     }
 
+    @GetMapping("/books/byTitleId/{title_id}/available")
+    public List<LibraryBookDto> getBooksByTitleIdAvailable(@PathVariable Long title_id) {
+        try {
+            LibraryBookTitle libraryBookTitle = libraryDbService.getTitle(title_id);
+            return libraryMapper.mapLibraryBookListToLibraryBookDtoList(libraryDbService.getBooksByTitleAvailable(libraryBookTitle));
+        } catch (TitleNotFoundException e) {
+            LOGGER.warn(e.getMessage());
+            return null;
+        }
+    }
+
     @PostMapping("books/createNewBook/forTitleId/{title_id}")
     public void createBook(@PathVariable Long title_id) {
         try {
@@ -119,6 +130,20 @@ public class LibraryController {
             LibraryBook newLibraryBook = new LibraryBook(null, libraryBookTitle, LibraryBookStatus.AVAILABLE);
             libraryDbService.saveBook(newLibraryBook);
         } catch (TitleNotFoundException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    @PutMapping("books/{book_id}/changeBookStatus")
+    public void changeBookStatus(@PathVariable Long book_id, @RequestParam String newStatus) {
+        try {
+            LibraryBook libraryBook = libraryDbService.getBook(book_id);
+            LibraryBookStatus newStatusEnum = LibraryBookStatus.valueOf(newStatus);
+            libraryBook.setLibraryBookStatus(newStatusEnum);
+            libraryDbService.saveBook(libraryBook);
+        } catch (BookNotFoundException e) {
+            LOGGER.warn(e.getMessage());
+        } catch (IllegalArgumentException e) {
             LOGGER.warn(e.getMessage());
         }
     }

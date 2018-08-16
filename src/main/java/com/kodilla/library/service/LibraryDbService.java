@@ -1,6 +1,7 @@
 package com.kodilla.library.service;
 
 import com.kodilla.library.domain.LibraryBook;
+import com.kodilla.library.domain.LibraryBookStatus;
 import com.kodilla.library.domain.LibraryBookTitle;
 import com.kodilla.library.domain.LibraryUser;
 import com.kodilla.library.exceptions.BookNotFoundException;
@@ -82,7 +83,15 @@ public class LibraryDbService {
         return bookRepository.findAllByLibraryBookTitle(libraryBookTitle);
     }
 
+    public List<LibraryBook> getBooksByTitleAvailable(LibraryBookTitle libraryBookTitle) {
+        return bookRepository.findAllByLibraryBookTitleAndLibraryBookStatus(libraryBookTitle, LibraryBookStatus.AVAILABLE);
+    }
+
     public void saveBook(LibraryBook libraryBook) {
+        bookRepository.save(libraryBook);
+    }
+
+    public void saveOrUpdateBook(LibraryBook libraryBook) {
         bookRepository.save(libraryBook);
     }
 
