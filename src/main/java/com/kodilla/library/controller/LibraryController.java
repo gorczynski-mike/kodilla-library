@@ -50,6 +50,11 @@ public class LibraryController {
         libraryDbService.saveUser(libraryMapper.mapUserDtoToUser(libraryUserDto));
     }
 
+    @DeleteMapping("/users/deleteUser/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        libraryDbService.deleteUser(id);
+    }
+
     @GetMapping("/titles")
     public List<LibraryBookTitle> getTitles() {
         return libraryDbService.getAllTitles();
@@ -69,6 +74,11 @@ public class LibraryController {
     public void createTitle(@RequestBody LibraryBookTitleDto libraryBookTitleDto) {
         libraryBookTitleDto.setId(null);
         libraryDbService.saveTitle(libraryMapper.mapBookTitleDtoToBookTitle(libraryBookTitleDto));
+    }
+
+    @DeleteMapping("/titles/deleteTitle/{id}")
+    public void deleteTitle(@PathVariable Long id) {
+        libraryDbService.deleteTitle(id);
     }
 
 }

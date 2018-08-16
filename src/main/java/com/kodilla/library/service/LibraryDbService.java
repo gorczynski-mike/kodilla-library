@@ -33,8 +33,20 @@ public class LibraryDbService {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
+    public boolean userExists(Long id) throws UserNotFoundException {
+        if(userRepository.exists(id)) {
+            return true;
+        } else {
+            throw new UserNotFoundException(id);
+        }
+    }
+
     public void saveUser(LibraryUser libraryUser) {
         userRepository.save(libraryUser);
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.delete(id);
     }
 
     public List<LibraryBookTitle> getAllTitles() {
@@ -47,5 +59,9 @@ public class LibraryDbService {
 
     public void saveTitle(LibraryBookTitle libraryBookTitle) {
         titleRepository.save(libraryBookTitle);
+    }
+
+    public void deleteTitle(Long id) {
+        titleRepository.delete(id);
     }
 }
