@@ -19,8 +19,8 @@ import java.time.LocalDate;
 @Setter
 public class LibraryRentDto {
     private Long id;
-    private LibraryBook libraryBook;
-    private LibraryUser libraryUser;
+    private LibraryBookDto libraryBook;
+    private LibraryUserDto libraryUser;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)

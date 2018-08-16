@@ -37,20 +37,21 @@ public class LibraryMapper {
     }
 
     public LibraryBookDto mapLibraryBookToLibraryBookDto(LibraryBook libraryBook) {
-        return new LibraryBookDto(libraryBook.getId(), libraryBook.getLibraryBookTitle(),
+        return new LibraryBookDto(libraryBook.getId(), mapBookTitleToBookTitleDto(libraryBook.getLibraryBookTitle()),
                 libraryBook.getLibraryBookStatus());
     }
 
     public List<LibraryBookDto> mapLibraryBookListToLibraryBookDtoList(List<LibraryBook> libraryBooks) {
         return libraryBooks.stream()
-                .map(book ->  new LibraryBookDto(book.getId(), book.getLibraryBookTitle(), book.getLibraryBookStatus()))
+                .map(book ->  new LibraryBookDto(book.getId(), mapBookTitleToBookTitleDto(book.getLibraryBookTitle()),
+                        book.getLibraryBookStatus()))
                 .collect(Collectors.toList());
     }
 
     public List<LibraryRentDto> mapLibraryRentListToLibraryRentDtoList(List<LibraryRent> libraryRents) {
         return libraryRents.stream()
-                .map(rent -> new LibraryRentDto(rent.getId(), rent.getLibraryBook(), rent.getLibraryUser(),
-                        rent.getRentStartDate(), rent.getRentEndDate()))
+                .map(rent -> new LibraryRentDto(rent.getId(), mapLibraryBookToLibraryBookDto(rent.getLibraryBook()),
+                        mapUserToUserDto(rent.getLibraryUser()), rent.getRentStartDate(), rent.getRentEndDate()))
                 .collect(Collectors.toList());
     }
 }
