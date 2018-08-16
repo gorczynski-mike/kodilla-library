@@ -32,14 +32,14 @@ public class LibraryDbService {
 
     public LibraryUser getUser(Long id) throws UserNotFoundException {
         return userRepository.findById(id).orElseThrow(() ->
-                new UserNotFoundException(UserNotFoundException.USER_NOT_FOUND_EXCEPTION + " for id: " + id));
+                new UserNotFoundException(UserNotFoundException.USER_NOT_FOUND_EXCEPTION + " for user_id: " + id));
     }
 
     public boolean userExists(Long id) throws UserNotFoundException {
         if(userRepository.exists(id)) {
             return true;
         } else {
-            throw new UserNotFoundException(UserNotFoundException.USER_NOT_FOUND_EXCEPTION + " for id: " + id);
+            throw new UserNotFoundException(UserNotFoundException.USER_NOT_FOUND_EXCEPTION + " for user_id: " + id);
         }
     }
 
@@ -57,7 +57,7 @@ public class LibraryDbService {
 
     public LibraryBookTitle getTitle(Long id) throws TitleNotFoundException {
         return titleRepository.findById(id).orElseThrow(() ->
-                new TitleNotFoundException(TitleNotFoundException.TITLE_NOT_FOUND_EXCEPTION + " for id: " + id));
+                new TitleNotFoundException(TitleNotFoundException.TITLE_NOT_FOUND_EXCEPTION + " for title_id: " + id));
     }
 
     public void saveTitle(LibraryBookTitle libraryBookTitle) {
@@ -74,7 +74,7 @@ public class LibraryDbService {
 
     public LibraryBook getBook(Long id) throws BookNotFoundException {
         return bookRepository.findById(id).orElseThrow(() ->
-                new BookNotFoundException(BookNotFoundException.BOOK_NOT_FOUND_EXCEPTION + " for id: " + id));
+                new BookNotFoundException(BookNotFoundException.BOOK_NOT_FOUND_EXCEPTION + " for book_id: " + id));
     }
 
     public List<LibraryBook> getBooksByTitle(LibraryBookTitle libraryBookTitle) {
@@ -99,7 +99,7 @@ public class LibraryDbService {
 
     public LibraryRent getRent(Long id) throws RentNotFoundException {
         return rentRepository.findById(id).orElseThrow(() ->
-                new RentNotFoundException(RentNotFoundException.RENT_NOT_FOUND_EXCEPTION + " for id: " + id));
+                new RentNotFoundException(RentNotFoundException.RENT_NOT_FOUND_EXCEPTION + " for rent_id: " + id));
     }
 
     public List<LibraryRent> getAllRents() {

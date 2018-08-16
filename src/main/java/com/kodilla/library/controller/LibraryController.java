@@ -168,7 +168,7 @@ public class LibraryController {
             LibraryUser libraryUser = libraryDbService.getUser(user_id);
             LibraryBook libraryBook = libraryDbService.getBook(book_id);
             if(!libraryBook.getLibraryBookStatus().equals(LibraryBookStatus.AVAILABLE)) {
-                throw new BookNotAvailableException(BookNotAvailableException.BOOK_NOT_AVAILABLE_EXCEPTION + " for id: " + book_id);
+                throw new BookNotAvailableException(BookNotAvailableException.BOOK_NOT_AVAILABLE_EXCEPTION + " for book_id: " + book_id);
             }
             libraryBook.setLibraryBookStatus(LibraryBookStatus.RENTED);
             LibraryRent libraryRent = new LibraryRent(null, libraryBook, libraryUser, LocalDate.now(), null);
@@ -185,7 +185,7 @@ public class LibraryController {
         try {
             LibraryRent libraryRent = libraryDbService.getRent(rent_id);
             if(libraryRent.getRentEndDate() != null) {
-                throw new RentAlreadyEndedException(RentAlreadyEndedException.RENT_ALREADY_ENDED_EXCEPTION + " for id: " + rent_id);
+                throw new RentAlreadyEndedException(RentAlreadyEndedException.RENT_ALREADY_ENDED_EXCEPTION + " for rent_id: " + rent_id);
             }
             libraryRent.setRentEndDate(LocalDate.now());
             libraryRent.getLibraryBook().setLibraryBookStatus(LibraryBookStatus.AVAILABLE);
