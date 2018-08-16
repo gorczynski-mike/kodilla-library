@@ -133,7 +133,7 @@ public class LibraryController {
     }
 
     @PutMapping("books/{book_id}/changeBookStatus")
-    public void changeBookStatus(@PathVariable Long book_id, @RequestParam String newStatus) throws Exception {
+    public void changeBookStatus(@PathVariable Long book_id, @RequestParam String newStatus) throws GenericLibraryException {
         try {
             LibraryBook libraryBook = libraryDbService.getBook(book_id);
             LibraryBookStatus newStatusEnum = LibraryBookStatus.valueOf(newStatus);
@@ -143,8 +143,11 @@ public class LibraryController {
             LOGGER.warn(e.getMessage());
             throw e;
         } catch (IllegalArgumentException e) {
-            LOGGER.warn(e.getMessage());
-            throw e;
+            GenericLibraryException exception =
+                    new BookStatusNotExistsException(BookStatusNotExistsException.BOOK_STATUS_NOT_EXISTS_EXCEPTION +
+                    " for status: " + newStatus);
+            LOGGER.warn(exception.getMessage());
+            throw exception;
         }
     }
 
