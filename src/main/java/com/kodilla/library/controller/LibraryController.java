@@ -1,12 +1,11 @@
 package com.kodilla.library.controller;
 
-import com.kodilla.library.domain.LibraryBook;
-import com.kodilla.library.domain.LibraryBookStatus;
-import com.kodilla.library.domain.LibraryBookTitle;
-import com.kodilla.library.domain.LibraryUser;
+import com.kodilla.library.domain.*;
 import com.kodilla.library.domain.dto.LibraryBookDto;
 import com.kodilla.library.domain.dto.LibraryBookTitleDto;
+import com.kodilla.library.domain.dto.LibraryRentDto;
 import com.kodilla.library.domain.dto.LibraryUserDto;
+import com.kodilla.library.exceptions.BookNotAvailableException;
 import com.kodilla.library.exceptions.BookNotFoundException;
 import com.kodilla.library.exceptions.TitleNotFoundException;
 import com.kodilla.library.exceptions.UserNotFoundException;
@@ -15,6 +14,7 @@ import com.kodilla.library.service.LibraryDbService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -151,6 +151,28 @@ public class LibraryController {
     @DeleteMapping("books/deleteBook/byId/{id}")
     public void deleteBook(@PathVariable Long id) {
         libraryDbService.deleteBook(id);
+    }
+
+    @GetMapping("rents")
+    public List<LibraryRentDto> getAllRents() {
+        return libraryMapper.mapLibraryRentListToLibraryRentDtoList(libraryDbService.getAllRents());
+    }
+
+    @Transactional
+    @PostMapping("rents/createNewRent")
+    public void createNewRent(@RequestParam Long user_id, @RequestParam Long book_id) {
+        try {
+            LibraryUser libraryUser = libraryDbService.getUser(user_id);
+            LibraryBook libraryBook = libraryDbService.getBook(book_id);
+            if(!libraryBook.getLibraryBookStatus().equals(LibraryBookStatus.AVAILABLE)) {
+                throw new BookNotAvailableException(BookNotAvailableException.BOOK_NOT_AVAILABLE_EXCEPTION + " for id: " + book_id);
+            }
+            libraryBook.setLibraryBookStatus(LibraryBookStatus.RENTED);
+            LibraryRent libraryRent = new LibraryRent(null, libraryBook, libraryUser, LocalDate.now(), null);
+            libraryDbService.saveRent(libraryRent);
+        } catch (UserNotFoundException | BookNotFoundException | BookNotAvailableException e) {
+            LOGGER.warn(e.getMessage());
+        }
     }
 
 }

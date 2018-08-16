@@ -2,9 +2,11 @@ package com.kodilla.library.mapper;
 
 import com.kodilla.library.domain.LibraryBook;
 import com.kodilla.library.domain.LibraryBookTitle;
+import com.kodilla.library.domain.LibraryRent;
 import com.kodilla.library.domain.LibraryUser;
 import com.kodilla.library.domain.dto.LibraryBookDto;
 import com.kodilla.library.domain.dto.LibraryBookTitleDto;
+import com.kodilla.library.domain.dto.LibraryRentDto;
 import com.kodilla.library.domain.dto.LibraryUserDto;
 import org.springframework.stereotype.Component;
 
@@ -42,6 +44,13 @@ public class LibraryMapper {
     public List<LibraryBookDto> mapLibraryBookListToLibraryBookDtoList(List<LibraryBook> libraryBooks) {
         return libraryBooks.stream()
                 .map(book ->  new LibraryBookDto(book.getId(), book.getLibraryBookTitle(), book.getLibraryBookStatus()))
+                .collect(Collectors.toList());
+    }
+
+    public List<LibraryRentDto> mapLibraryRentListToLibraryRentDtoList(List<LibraryRent> libraryRents) {
+        return libraryRents.stream()
+                .map(rent -> new LibraryRentDto(rent.getId(), rent.getLibraryBook(), rent.getLibraryUser(),
+                        rent.getRentStartDate(), rent.getRentEndDate()))
                 .collect(Collectors.toList());
     }
 }
