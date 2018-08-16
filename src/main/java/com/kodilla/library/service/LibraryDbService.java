@@ -32,14 +32,15 @@ public class LibraryDbService {
     }
 
     public LibraryUser getUser(Long id) throws UserNotFoundException {
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        return userRepository.findById(id).orElseThrow(() ->
+                new UserNotFoundException(UserNotFoundException.USER_NOT_FOUND_EXCEPTION + " for id: " + id));
     }
 
     public boolean userExists(Long id) throws UserNotFoundException {
         if(userRepository.exists(id)) {
             return true;
         } else {
-            throw new UserNotFoundException(id);
+            throw new UserNotFoundException(UserNotFoundException.USER_NOT_FOUND_EXCEPTION + " for id: " + id);
         }
     }
 
@@ -56,7 +57,8 @@ public class LibraryDbService {
     }
 
     public LibraryBookTitle getTitle(Long id) throws TitleNotFoundException {
-        return titleRepository.findById(id).orElseThrow(() -> new TitleNotFoundException(id));
+        return titleRepository.findById(id).orElseThrow(() ->
+                new TitleNotFoundException(TitleNotFoundException.TITLE_NOT_FOUND_EXCEPTION + " for id: " + id));
     }
 
     public void saveTitle(LibraryBookTitle libraryBookTitle) {

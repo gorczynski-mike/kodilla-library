@@ -1,7 +1,10 @@
 package com.kodilla.library.exceptions;
 
 public class UserNotFoundException extends Exception {
-    public UserNotFoundException(Long id) {
-        super("User not found in database for id: " + id);
+
+    public static final String USER_NOT_FOUND_EXCEPTION = "USER_NOT_FOUND_EXCEPTION";
+
+    public UserNotFoundException(String message) {
+        super(message);
     }
 }
