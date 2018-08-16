@@ -1,9 +1,13 @@
 package com.kodilla.library.controller;
 
+import com.kodilla.library.domain.LibraryBook;
+import com.kodilla.library.domain.LibraryBookStatus;
 import com.kodilla.library.domain.LibraryBookTitle;
 import com.kodilla.library.domain.LibraryUser;
+import com.kodilla.library.domain.dto.LibraryBookDto;
 import com.kodilla.library.domain.dto.LibraryBookTitleDto;
 import com.kodilla.library.domain.dto.LibraryUserDto;
+import com.kodilla.library.exceptions.BookNotFoundException;
 import com.kodilla.library.exceptions.TitleNotFoundException;
 import com.kodilla.library.exceptions.UserNotFoundException;
 import com.kodilla.library.mapper.LibraryMapper;
@@ -79,6 +83,37 @@ public class LibraryController {
     @DeleteMapping("/titles/deleteTitle/{id}")
     public void deleteTitle(@PathVariable Long id) {
         libraryDbService.deleteTitle(id);
+    }
+
+    @GetMapping("/books")
+    public List<LibraryBook> getBooks() {
+        return libraryDbService.getAllBooks();
+    }
+
+    @GetMapping("/books/{id}")
+    public LibraryBookDto getBook(@PathVariable Long id) {
+        try {
+            return libraryMapper.mapLibraryBookToLibraryBookDto(libraryDbService.getBook(id));
+        } catch (BookNotFoundException e) {
+            LOGGER.warn(e.getMessage());
+            return null;
+        }
+    }
+
+    @PostMapping("books/createNewBook/forTitleId/{title_id}")
+    public void createBook(@PathVariable Long title_id) {
+        try {
+            LibraryBookTitle libraryBookTitle = libraryDbService.getTitle(title_id);
+            LibraryBook newLibraryBook = new LibraryBook(null, libraryBookTitle, LibraryBookStatus.AVAILABLE);
+            libraryDbService.saveBook(newLibraryBook);
+        } catch (TitleNotFoundException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("books/deleteBook/byId/{id}")
+    public void deleteBook(@PathVariable Long id) {
+        libraryDbService.deleteBook(id);
     }
 
 }

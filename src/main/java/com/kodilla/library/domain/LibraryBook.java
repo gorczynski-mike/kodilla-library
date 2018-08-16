@@ -2,10 +2,12 @@ package com.kodilla.library.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Entity(name = "LibraryBooks")
 public class LibraryBook {
@@ -15,7 +17,7 @@ public class LibraryBook {
     @Column(name = "BOOK_ID", updatable = false, nullable = false)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = LibraryBookTitle.class)
+    @ManyToOne(cascade = CascadeType.DETACH, targetEntity = LibraryBookTitle.class)
     @JoinColumn(name = "TITLE_ID")
     private LibraryBookTitle libraryBookTitle;
 

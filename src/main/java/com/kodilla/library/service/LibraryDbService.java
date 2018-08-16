@@ -1,7 +1,9 @@
 package com.kodilla.library.service;
 
+import com.kodilla.library.domain.LibraryBook;
 import com.kodilla.library.domain.LibraryBookTitle;
 import com.kodilla.library.domain.LibraryUser;
+import com.kodilla.library.exceptions.BookNotFoundException;
 import com.kodilla.library.exceptions.TitleNotFoundException;
 import com.kodilla.library.exceptions.UserNotFoundException;
 import com.kodilla.library.repository.BookRepository;
@@ -63,5 +65,22 @@ public class LibraryDbService {
 
     public void deleteTitle(Long id) {
         titleRepository.delete(id);
+    }
+
+    public List<LibraryBook> getAllBooks() {
+        return bookRepository.findAll();
+    }
+
+    public LibraryBook getBook(Long id) throws BookNotFoundException {
+        return bookRepository.findById(id).orElseThrow(() ->
+                new BookNotFoundException(BookNotFoundException.BOOK_NOT_FOUND_EXCEPTION + " for id: " + id));
+    }
+
+    public void saveBook(LibraryBook libraryBook) {
+        bookRepository.save(libraryBook);
+    }
+
+    public void deleteBook(Long id) {
+        bookRepository.delete(id);
     }
 }
