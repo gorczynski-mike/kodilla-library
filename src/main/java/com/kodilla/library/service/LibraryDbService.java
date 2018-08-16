@@ -2,6 +2,7 @@ package com.kodilla.library.service;
 
 import com.kodilla.library.domain.*;
 import com.kodilla.library.exceptions.BookNotFoundException;
+import com.kodilla.library.exceptions.RentNotFoundException;
 import com.kodilla.library.exceptions.TitleNotFoundException;
 import com.kodilla.library.exceptions.UserNotFoundException;
 import com.kodilla.library.repository.BookRepository;
@@ -94,6 +95,11 @@ public class LibraryDbService {
 
     public void deleteBook(Long id) {
         bookRepository.delete(id);
+    }
+
+    public LibraryRent getRent(Long id) throws RentNotFoundException {
+        return rentRepository.findById(id).orElseThrow(() ->
+                new RentNotFoundException(RentNotFoundException.RENT_NOT_FOUND_EXCEPTION + " for id: " + id));
     }
 
     public List<LibraryRent> getAllRents() {

@@ -5,10 +5,7 @@ import com.kodilla.library.domain.dto.LibraryBookDto;
 import com.kodilla.library.domain.dto.LibraryBookTitleDto;
 import com.kodilla.library.domain.dto.LibraryRentDto;
 import com.kodilla.library.domain.dto.LibraryUserDto;
-import com.kodilla.library.exceptions.BookNotAvailableException;
-import com.kodilla.library.exceptions.BookNotFoundException;
-import com.kodilla.library.exceptions.TitleNotFoundException;
-import com.kodilla.library.exceptions.UserNotFoundException;
+import com.kodilla.library.exceptions.*;
 import com.kodilla.library.mapper.LibraryMapper;
 import com.kodilla.library.service.LibraryDbService;
 import org.slf4j.Logger;
@@ -171,6 +168,21 @@ public class LibraryController {
             LibraryRent libraryRent = new LibraryRent(null, libraryBook, libraryUser, LocalDate.now(), null);
             libraryDbService.saveRent(libraryRent);
         } catch (UserNotFoundException | BookNotFoundException | BookNotAvailableException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @PutMapping("rents/endRent/byId/{rent_id}")
+    public void endRent(@PathVariable Long rent_id) {
+        try {
+            LibraryRent libraryRent = libraryDbService.getRent(rent_id);
+            if(libraryRent.getRentEndDate() != null) {
+                throw new RentAlreadyEndedException(RentAlreadyEndedException.RENT_ALREADY_ENDED_EXCEPTION + " for id: " + rent_id);
+            }
+            libraryRent.setRentEndDate(LocalDate.now());
+            libraryRent.getLibraryBook().setLibraryBookStatus(LibraryBookStatus.AVAILABLE);
+        } catch (RentNotFoundException | RentAlreadyEndedException e) {
             LOGGER.warn(e.getMessage());
         }
     }

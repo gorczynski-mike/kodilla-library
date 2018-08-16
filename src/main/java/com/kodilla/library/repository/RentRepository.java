@@ -1,10 +1,10 @@
 package com.kodilla.library.repository;
 
 import com.kodilla.library.domain.LibraryRent;
-import com.kodilla.library.domain.LibraryUser;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RentRepository extends CrudRepository<LibraryRent, Long> {
 
@@ -14,7 +14,7 @@ public interface RentRepository extends CrudRepository<LibraryRent, Long> {
     @Override
     LibraryRent findOne(Long id);
 
-    List<LibraryRent> findAllByLibraryUser(LibraryUser libraryUser);
+    Optional<LibraryRent> findById(Long id);
 
     @Override
     LibraryRent save(LibraryRent libraryRent);
