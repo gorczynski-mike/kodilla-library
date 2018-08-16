@@ -1,6 +1,6 @@
 package com.kodilla.library.exceptions;
 
-public class TitleNotFoundException extends Exception {
+public class TitleNotFoundException extends GenericLibraryException {
 
     public static final String TITLE_NOT_FOUND_EXCEPTION = "TITLE_NOT_FOUND_EXCEPTION";
 

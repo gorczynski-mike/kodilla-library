@@ -121,18 +121,19 @@ public class LibraryController {
     }
 
     @PostMapping("books/createNewBook/forTitleId/{title_id}")
-    public void createBook(@PathVariable Long title_id) {
+    public void createBook(@PathVariable Long title_id) throws GenericLibraryException {
         try {
             LibraryBookTitle libraryBookTitle = libraryDbService.getTitle(title_id);
             LibraryBook newLibraryBook = new LibraryBook(null, libraryBookTitle, LibraryBookStatus.AVAILABLE);
             libraryDbService.saveBook(newLibraryBook);
         } catch (TitleNotFoundException e) {
             LOGGER.warn(e.getMessage());
+            throw e;
         }
     }
 
     @PutMapping("books/{book_id}/changeBookStatus")
-    public void changeBookStatus(@PathVariable Long book_id, @RequestParam String newStatus) {
+    public void changeBookStatus(@PathVariable Long book_id, @RequestParam String newStatus) throws Exception {
         try {
             LibraryBook libraryBook = libraryDbService.getBook(book_id);
             LibraryBookStatus newStatusEnum = LibraryBookStatus.valueOf(newStatus);
@@ -140,8 +141,10 @@ public class LibraryController {
             libraryDbService.saveBook(libraryBook);
         } catch (BookNotFoundException e) {
             LOGGER.warn(e.getMessage());
+            throw e;
         } catch (IllegalArgumentException e) {
             LOGGER.warn(e.getMessage());
+            throw e;
         }
     }
 
@@ -157,7 +160,7 @@ public class LibraryController {
 
     @Transactional
     @PostMapping("rents/createNewRent")
-    public void createNewRent(@RequestParam Long user_id, @RequestParam Long book_id) {
+    public void createNewRent(@RequestParam Long user_id, @RequestParam Long book_id) throws GenericLibraryException {
         try {
             LibraryUser libraryUser = libraryDbService.getUser(user_id);
             LibraryBook libraryBook = libraryDbService.getBook(book_id);
@@ -169,12 +172,13 @@ public class LibraryController {
             libraryDbService.saveRent(libraryRent);
         } catch (UserNotFoundException | BookNotFoundException | BookNotAvailableException e) {
             LOGGER.warn(e.getMessage());
+            throw e;
         }
     }
 
     @Transactional
     @PutMapping("rents/endRent/byId/{rent_id}")
-    public void endRent(@PathVariable Long rent_id) {
+    public void endRent(@PathVariable Long rent_id) throws GenericLibraryException {
         try {
             LibraryRent libraryRent = libraryDbService.getRent(rent_id);
             if(libraryRent.getRentEndDate() != null) {
@@ -184,6 +188,7 @@ public class LibraryController {
             libraryRent.getLibraryBook().setLibraryBookStatus(LibraryBookStatus.AVAILABLE);
         } catch (RentNotFoundException | RentAlreadyEndedException e) {
             LOGGER.warn(e.getMessage());
+            throw e;
         }
     }
 

@@ -1,6 +1,6 @@
 package com.kodilla.library.exceptions;
 
-public class BookNotAvailableException extends Exception {
+public class BookNotAvailableException extends GenericLibraryException {
 
     public static final String BOOK_NOT_AVAILABLE_EXCEPTION = "BOOK_NOT_AVAILABLE_EXCEPTION";
 
