@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -95,6 +96,17 @@ public class LibraryController {
         try {
             return libraryMapper.mapLibraryBookToLibraryBookDto(libraryDbService.getBook(id));
         } catch (BookNotFoundException e) {
+            LOGGER.warn(e.getMessage());
+            return null;
+        }
+    }
+
+    @GetMapping("/books/byTitleId/{title_id}")
+    public List<LibraryBookDto> getBooksByTitleId(@PathVariable Long title_id) {
+        try {
+            LibraryBookTitle libraryBookTitle = libraryDbService.getTitle(title_id);
+            return libraryMapper.mapLibraryBookListToLibraryBookDtoList(libraryDbService.getBooksByTitle(libraryBookTitle));
+        } catch (TitleNotFoundException e) {
             LOGGER.warn(e.getMessage());
             return null;
         }

@@ -78,6 +78,10 @@ public class LibraryDbService {
                 new BookNotFoundException(BookNotFoundException.BOOK_NOT_FOUND_EXCEPTION + " for id: " + id));
     }
 
+    public List<LibraryBook> getBooksByTitle(LibraryBookTitle libraryBookTitle) {
+        return bookRepository.findAllByLibraryBookTitle(libraryBookTitle);
+    }
+
     public void saveBook(LibraryBook libraryBook) {
         bookRepository.save(libraryBook);
     }

@@ -1,6 +1,7 @@
 package com.kodilla.library.repository;
 
 import com.kodilla.library.domain.LibraryBook;
+import com.kodilla.library.domain.LibraryBookTitle;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -12,6 +13,8 @@ public interface BookRepository extends CrudRepository<LibraryBook, Long> {
     LibraryBook save(LibraryBook libraryBook);
 
     Optional<LibraryBook> findById(Long id);
+
+    List<LibraryBook> findAllByLibraryBookTitle(LibraryBookTitle libraryBookTitle);
 
     @Override
     List<LibraryBook> findAll();

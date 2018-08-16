@@ -8,6 +8,9 @@ import com.kodilla.library.domain.dto.LibraryBookTitleDto;
 import com.kodilla.library.domain.dto.LibraryUserDto;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class LibraryMapper {
 
@@ -31,14 +34,14 @@ public class LibraryMapper {
                 libraryBookTitle.getAuthor(), libraryBookTitle.getPublicationYear());
     }
 
-    public LibraryBook mapLibraryBookDtoToLibraryBook(LibraryBookDto libraryBookDto) {
-        return new LibraryBook(libraryBookDto.getId(), libraryBookDto.getLibraryBookTitle(),
-                libraryBookDto.getLibraryBookStatus());
-    }
-
     public LibraryBookDto mapLibraryBookToLibraryBookDto(LibraryBook libraryBook) {
         return new LibraryBookDto(libraryBook.getId(), libraryBook.getLibraryBookTitle(),
                 libraryBook.getLibraryBookStatus());
     }
 
+    public List<LibraryBookDto> mapLibraryBookListToLibraryBookDtoList(List<LibraryBook> libraryBooks) {
+        return libraryBooks.stream()
+                .map(book ->  new LibraryBookDto(book.getId(), book.getLibraryBookTitle(), book.getLibraryBookStatus()))
+                .collect(Collectors.toList());
+    }
 }
