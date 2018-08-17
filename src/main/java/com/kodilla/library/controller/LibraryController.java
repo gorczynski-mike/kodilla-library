@@ -197,7 +197,28 @@ public class LibraryController {
             }
             libraryRent.setRentEndDate(LocalDate.now());
             libraryRent.getLibraryBook().setLibraryBookStatus(LibraryBookStatus.AVAILABLE);
-        } catch (RentNotFoundException | RentAlreadyEndedException e) {
+            libraryDbService.saveRent(libraryRent);
+        } catch (RentNotFoundException | RentAlreadyEndedException | CantEndRentWhenBookIsLost e) {
+            LOGGER.warn(e.getMessage());
+            throw e;
+        }
+    }
+
+    @Transactional
+    @PutMapping("rents/payForLostRent/byId/{rent_id}")
+    public void payForLostRent(@PathVariable Long rent_id) throws GenericLibraryException {
+        try {
+            LibraryRent libraryRent = libraryDbService.getRent(rent_id);
+            if(libraryRent.getRentEndDate() != null) {
+                throw new RentAlreadyEndedException(RentAlreadyEndedException.RENT_ALREADY_ENDED_EXCEPTION + " for rent_id: " + rent_id);
+            }
+            if(!libraryRent.getLibraryBook().getLibraryBookStatus().equals(LibraryBookStatus.LOST)) {
+                throw new CantPayForBookNotLost(CantPayForBookNotLost.CANT_PAY_FOR_BOOK_NOT_LOST_EXCEPTION + " for rent id: " + rent_id);
+            }
+            libraryRent.setRentEndDate(LocalDate.now());
+            libraryRent.getLibraryBook().setLibraryBookStatus(LibraryBookStatus.AVAILABLE);
+            libraryDbService.saveRent(libraryRent);
+        } catch (RentNotFoundException | RentAlreadyEndedException | CantPayForBookNotLost e) {
             LOGGER.warn(e.getMessage());
             throw e;
         }

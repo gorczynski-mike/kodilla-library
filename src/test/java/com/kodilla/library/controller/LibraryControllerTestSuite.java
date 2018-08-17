@@ -206,4 +206,25 @@ public class LibraryControllerTestSuite {
         Assert.assertEquals(RentAlreadyEndedException.class, exceptionClass);
     }
 
+    @Test
+    public void shouldBeAbleToPayForLostBookAndEndRent() throws Exception {
+        //Given
+        Long user_id = 1L;
+        Long book_id = 1L;
+        LibraryUser user = new LibraryUser(user_id, "firstname", "lastname", LocalDate.now());
+        LibraryBook book = new LibraryBook(book_id, new LibraryBookTitle(1L, "title", "author", 1970),
+                LibraryBookStatus.LOST);
+        LibraryRent rent = new LibraryRent(1L, book, user, LocalDate.now(), null);
+
+        when(libraryDbService.getRent(1L)).thenReturn(rent);
+
+        //When
+        mockMvc.perform(MockMvcRequestBuilders.put("/v1/library/rents/payForLostRent/byId/{rent_id}", "1"))
+                    .andExpect(MockMvcResultMatchers.status().is(200));
+
+        //Then
+        Assert.assertEquals(LibraryBookStatus.AVAILABLE, book.getLibraryBookStatus());
+        Assert.assertNotNull(rent.getRentEndDate());
+    }
+
 }
