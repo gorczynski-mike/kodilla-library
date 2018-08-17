@@ -192,6 +192,9 @@ public class LibraryController {
             if(libraryRent.getRentEndDate() != null) {
                 throw new RentAlreadyEndedException(RentAlreadyEndedException.RENT_ALREADY_ENDED_EXCEPTION + " for rent_id: " + rent_id);
             }
+            if(libraryRent.getLibraryBook().getLibraryBookStatus().equals(LibraryBookStatus.LOST)) {
+                throw new CantEndRentWhenBookIsLost(CantEndRentWhenBookIsLost.CANT_END_RENT_WHEN_BOOK_LOST_EXCEPTION + " for rent id: " + rent_id);
+            }
             libraryRent.setRentEndDate(LocalDate.now());
             libraryRent.getLibraryBook().setLibraryBookStatus(LibraryBookStatus.AVAILABLE);
         } catch (RentNotFoundException | RentAlreadyEndedException e) {

@@ -4,6 +4,8 @@ import com.kodilla.library.domain.*;
 import com.kodilla.library.domain.dto.LibraryBookDto;
 import com.kodilla.library.domain.dto.LibraryBookTitleDto;
 import com.kodilla.library.exceptions.BookNotAvailableException;
+import com.kodilla.library.exceptions.CantEndRentWhenBookIsLost;
+import com.kodilla.library.exceptions.RentAlreadyEndedException;
 import com.kodilla.library.mapper.LibraryMapper;
 import com.kodilla.library.service.LibraryDbService;
 import org.hamcrest.Matchers;
@@ -146,6 +148,62 @@ public class LibraryControllerTestSuite {
         //Then
         Assert.assertTrue(exceptionWasThrown);
         Assert.assertEquals(BookNotAvailableException.class, exceptionClass);
+    }
+
+    @Test
+    public void shouldNotEndRentWhenBookIsLost() throws Exception {
+        //Given
+        Long user_id = 1L;
+        Long book_id = 1L;
+        LibraryUser user = new LibraryUser(user_id, "firstname", "lastname", LocalDate.now());
+        LibraryBook book = new LibraryBook(book_id, new LibraryBookTitle(1L, "title", "author", 1970),
+                LibraryBookStatus.LOST);
+        LibraryRent rent = new LibraryRent(1L, book, user, LocalDate.now(), null);
+        boolean exceptionWasThrown = false;
+        Class<?> exceptionClass = null;
+
+        when(libraryDbService.getRent(1L)).thenReturn(rent);
+
+        //When
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.put("/v1/library/rents/endRent/byId/{rent_id}", "1"))
+                    .andExpect(MockMvcResultMatchers.status().is(400));
+        } catch (Exception e) {
+            exceptionWasThrown = true;
+            exceptionClass = e.getCause().getClass();
+        }
+
+        //Then
+        Assert.assertTrue(exceptionWasThrown);
+        Assert.assertEquals(CantEndRentWhenBookIsLost.class, exceptionClass);
+    }
+
+    @Test
+    public void shouldNotEndRentAlreadyEnded() throws Exception {
+        //Given
+        Long user_id = 1L;
+        Long book_id = 1L;
+        LibraryUser user = new LibraryUser(user_id, "firstname", "lastname", LocalDate.now());
+        LibraryBook book = new LibraryBook(book_id, new LibraryBookTitle(1L, "title", "author", 1970),
+                LibraryBookStatus.AVAILABLE);
+        LibraryRent rent = new LibraryRent(1L, book, user, LocalDate.now().minusDays(5), LocalDate.now());
+        boolean exceptionWasThrown = false;
+        Class<?> exceptionClass = null;
+
+        when(libraryDbService.getRent(1L)).thenReturn(rent);
+
+        //When
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.put("/v1/library/rents/endRent/byId/{rent_id}", "1"))
+                    .andExpect(MockMvcResultMatchers.status().is(400));
+        } catch (Exception e) {
+            exceptionWasThrown = true;
+            exceptionClass = e.getCause().getClass();
+        }
+
+        //Then
+        Assert.assertTrue(exceptionWasThrown);
+        Assert.assertEquals(RentAlreadyEndedException.class, exceptionClass);
     }
 
 }
