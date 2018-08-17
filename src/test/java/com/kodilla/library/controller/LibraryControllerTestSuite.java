@@ -78,9 +78,4 @@ public class LibraryControllerTestSuite {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].libraryBookStatus", Matchers.is("AVAILABLE")));
     }
 
-    @Test
-    public void shouldCreateNewTitle() {
-
-    }
-
 }

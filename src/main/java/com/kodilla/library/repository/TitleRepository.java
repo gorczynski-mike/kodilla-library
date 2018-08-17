@@ -17,6 +17,8 @@ public interface TitleRepository extends CrudRepository<LibraryBookTitle, Long> 
 
     List<LibraryBookTitle> findAllByAuthor(String author);
 
+    List<LibraryBookTitle> findAllByTitle(String title);
+
     List<LibraryBookTitle> findAllByPublicationYear(int publicationYear);
 
     @Override

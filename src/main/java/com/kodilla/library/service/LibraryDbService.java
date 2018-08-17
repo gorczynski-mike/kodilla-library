@@ -55,6 +55,8 @@ public class LibraryDbService {
         return titleRepository.findAll();
     }
 
+    public List<LibraryBookTitle> getAllTitlesByTitle(String title) { return titleRepository.findAllByTitle(title); }
+
     public LibraryBookTitle getTitle(Long id) throws TitleNotFoundException {
         return titleRepository.findById(id).orElseThrow(() ->
                 new TitleNotFoundException(TitleNotFoundException.TITLE_NOT_FOUND_EXCEPTION + " for title_id: " + id));
