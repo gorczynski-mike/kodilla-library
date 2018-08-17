@@ -108,7 +108,7 @@ public class LibraryDbService {
         return rentRepository.findAll();
     }
 
-    public void saveRent(LibraryRent libraryRent) {
-        rentRepository.save(libraryRent);
+    public LibraryRent saveRent(LibraryRent libraryRent) {
+        return rentRepository.save(libraryRent);
     }
 }

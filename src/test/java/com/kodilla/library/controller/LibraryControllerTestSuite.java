@@ -1,15 +1,16 @@
 package com.kodilla.library.controller;
 
-import com.kodilla.library.domain.LibraryBook;
-import com.kodilla.library.domain.LibraryBookStatus;
-import com.kodilla.library.domain.LibraryBookTitle;
+import com.kodilla.library.domain.*;
 import com.kodilla.library.domain.dto.LibraryBookDto;
 import com.kodilla.library.domain.dto.LibraryBookTitleDto;
+import com.kodilla.library.exceptions.BookNotAvailableException;
 import com.kodilla.library.mapper.LibraryMapper;
 import com.kodilla.library.service.LibraryDbService;
 import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +78,74 @@ public class LibraryControllerTestSuite {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].libraryBookTitle.author", Matchers.is("test_author")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].libraryBookTitle.publicationYear", Matchers.is(1970)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].libraryBookStatus", Matchers.is("AVAILABLE")));
+    }
+
+    @Test
+    public void shouldRentAvailableBookAndChangeBookStatus() throws Exception {
+        //Given
+        Long user_id = 1L;
+        Long book_id = 1L;
+        LibraryUser user = new LibraryUser(user_id, "firstname", "lastname", LocalDate.now());
+        LibraryBook book = new LibraryBook(book_id, new LibraryBookTitle(1L, "title", "author", 1970),
+                LibraryBookStatus.AVAILABLE);
+
+        ArgumentCaptor<LibraryRent> rentCaptor = ArgumentCaptor.forClass(LibraryRent.class);
+
+        when(libraryDbService.getUser(user_id)).thenReturn(user);
+        when(libraryDbService.getBook(book_id)).thenReturn(book);
+
+        //When
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/library/rents/createNewRent")
+                .param("user_id", String.valueOf(user_id))
+                .param("book_id", String.valueOf(book_id))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(200));
+
+
+        //Then
+        verify(libraryDbService).saveRent(rentCaptor.capture());
+        LibraryRent createdRent = rentCaptor.getValue();
+        Assert.assertNotNull(createdRent);
+        Assert.assertEquals(book, createdRent.getLibraryBook());
+        Assert.assertEquals(user, createdRent.getLibraryUser());
+        Assert.assertEquals(LibraryBookStatus.RENTED, book.getLibraryBookStatus());
+        Assert.assertEquals(LocalDate.now(), createdRent.getRentStartDate());
+        Assert.assertNull(createdRent.getRentEndDate());
+
+    }
+
+    @Test
+    public void shouldNotRentBookNotAvailable() throws Exception {
+        //Given
+        Long user_id = 1L;
+        Long book_id = 1L;
+        LibraryUser user = new LibraryUser(user_id, "firstname", "lastname", LocalDate.now());
+        LibraryBook book = new LibraryBook(book_id, new LibraryBookTitle(1L, "title", "author", 1970),
+                LibraryBookStatus.RENTED);
+        boolean exceptionWasThrown = false;
+        Class<?> exceptionClass = null;
+
+        ArgumentCaptor<LibraryRent> rentCaptor = ArgumentCaptor.forClass(LibraryRent.class);
+
+        when(libraryDbService.getUser(user_id)).thenReturn(user);
+        when(libraryDbService.getBook(book_id)).thenReturn(book);
+
+        //When
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.post("/v1/library/rents/createNewRent")
+                    .param("user_id", String.valueOf(user_id))
+                    .param("book_id", String.valueOf(book_id))
+                    .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(MockMvcResultMatchers.status().is(400));
+        } catch (Exception e) {
+            exceptionWasThrown = true;
+            exceptionClass = e.getCause().getClass();
+        }
+
+
+        //Then
+        Assert.assertTrue(exceptionWasThrown);
+        Assert.assertEquals(BookNotAvailableException.class, exceptionClass);
     }
 
 }
