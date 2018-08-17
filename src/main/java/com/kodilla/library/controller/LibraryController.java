@@ -89,8 +89,8 @@ public class LibraryController {
     }
 
     @GetMapping("/books")
-    public List<LibraryBook> getBooks() {
-        return libraryDbService.getAllBooks();
+    public List<LibraryBookDto> getBooks() {
+        return libraryMapper.mapLibraryBookListToLibraryBookDtoList(libraryDbService.getAllBooks());
     }
 
     @GetMapping("/books/{id}")
